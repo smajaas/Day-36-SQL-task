@@ -1,0 +1,191 @@
+The Following are the tables has to be in your database & model deisgn:
+users
+codekata
+attendance
+topics
+tasks
+company_drives
+mentors
+students_activated_courses
+courses
+
+The following are the queries need to be executed
+
+1. Create tables for the above list given
+2. insert at least 5 rows of values in each table
+3. get number problems solved in codekata by combining the users
+4. display the no of company drives attended by a user
+5. combine and display students_activated_courses and courses for a specific user groping them based on the course
+6. list all the mentors
+7. list the number of students that are assigned for a mentor
+
+*******************************************************************************************************************************************************
+// Question number #1 and #2
+
+CREATE DATABASE Guvi_students;
+USE Guvi_students;
+
+CREATE TABLE USERS(
+Id INT Not Null Auto_increment,
+student_name varchar(45),
+student_email varchar(45),
+primary key(Id));
+
+CREATE TABLE codekata(
+Id INT Not Null Auto_increment,
+program_name varchar(255),
+problem_solved_count int,
+user_Id int not null,
+primary key(Id),
+foreign key (user_Id) references USERS(Id)
+);
+
+CREATE TABLE attendance(
+Id INT Not Null Auto_increment,
+monthly_attendance varchar(255),
+remarks_attendance varchar(255),
+user_Id int not null,
+primary key(Id),
+foreign key (user_Id) references USERS(Id));
+
+CREATE TABLE topics(
+Id INT Not Null Auto_increment,
+topic_name varchar(255),
+internal_task varchar(255),
+user_Id int not null,
+primary key(Id),
+foreign key (user_Id) references USERS(Id));
+
+CREATE TABLE companydrives(
+Id INT Not Null Auto_increment,
+drives_name varchar(255),
+access_times int,
+user_Id int not null,
+primary key(Id),
+foreign key (user_Id) references USERS(Id));
+
+CREATE TABLE mentors(
+Id INT Not Null Auto_increment,
+mentors_name varchar(255),
+mentors_Id int not null,
+user_Id int not null,
+primary key(Id),
+foreign key (user_Id) references USERS(Id));
+
+CREATE TABLE students_activated_courses(
+Id INT Not Null Auto_increment,
+course_name varchar(255),
+course_Id int not null,
+status_course varchar(45),
+user_Id int not null,
+primary key(Id),
+foreign key (user_Id) references USERS(Id));
+
+CREATE TABLE courses(
+Id INT Not Null Auto_increment,
+course_name varchar(45) not null,
+course_duration varchar(45),
+primary key(Id));
+
+//Altered the tables
+
+ALTER TABLE attendance RENAME COLUMN month_attendance to monthly_attendance;
+drop table courses;
+select *from mentors;
+alter table USERS add gender varchar(10);
+ALTER TABLE USERS DROP COLUMN gender;
+
+INSERT INTO USERS(student_name,student_email,gender)
+VALUES('Mohammed Ajaas','smajaas@gmail.com','Male'),
+('Nandhini','nandhu@gmail.com','Female'),('Suresh','suresh@gmail.com','Male'),
+('Afaan','appu@yahoo.com','Female'),('Saranya','saranya@gmail.com','Female');
+
+select *from codekata;
+UPDATE USERS SET gender='Male' WHERE id=4;
+
+
+INSERT INTO codekata (program_name,problem_solved_count,user_Id)
+VALUES('JAVASCRIPT',5,1),('JAVASCRIPT',8,3),('JAVA',12,2),('SQL',22,1),
+('JAVASCRIPT',30,4),('PYTHON',18,5),('PYTHON',16,4);
+
+alter table attendance MODIFY COLUMN monthly_attendance varchar(45);
+
+INSERT INTO attendance (monthly_attendance,remarks_attendance,user_Id)
+VALUES('23 Days','Good',1),('30 Days','Fair',2),('18 Days','OK',3),('27 Days','FAIR',4),
+('11 Days','Warn',5);
+
+select *from attendance;
+
+INSERT INTO topics (topic_name,internal_task,user_Id)
+VALUES('HTTP','YES',1),('JAVASCRIPT','YES',3),('HTML','NO',2),('CSS','YES',1),
+('CSS','YES',4),('PYTHON','NO',5),('SQL','NO',4),
+('HTML','YES',3),('JAVASCRIPT','YES',2),('REACT','YES',1),
+('MONGODB','YES',4),('REACT','NO',5),('REACT','YES',4);
+
+select *from topics;
+
+INSERT INTO companydrives (drives_name,access_times,user_Id)
+VALUES('JAVA',12,1),('JAVASCRIPT',13,3),('PYTHON',28,2),('CSS',56,1),
+('MONGODB',24,4),('SQL',16,5),('CODEKATA',88,4),
+('DATASTRUCTURE',17,3),('ZENTASKS',123,2),('REACT',33,1),
+('HTML',82,4),('AWS',14,5),('FLASK',7,4);
+
+select *from companydrives;
+
+INSERT INTO mentors (mentors_name,mentors_Id,user_Id)
+VALUES('Raghav',12551,1),('Sai Mohan',12555,3),('Ajaas',12756,2),('Mohan',12343,1),
+('Muruganantham',12676,4),('Sridevi',12865,5),('Bhaskaran',12765,4),
+('Abdul',12888,3),('Palanivel',12367,2);
+
+INSERT INTO mentors (mentors_name,mentors_Id,user_Id)
+VALUES('Raghav',12551,3);
+
+select *from mentors;
+
+INSERT INTO students_activated_courses(course_name,course_Id,status_course,user_Id)
+VALUES('Full stack Development',11,'activated',1),('Python IIT',12,'activated',3),
+('Ethical Hacking',13,'activated',2),
+('AWS Master',14,'activated',1),('Testing Automation',15,'activated',4),
+('Master Data Science',16,'activated',5),('JAVASCRIPT FULL COURSE',17,'activated',1),
+('Machine Learning',18,'activated',3),('C programming',19,'activated',2),
+('MySQL',20,'activated',1),('Angular JS',21,'activated',4),
+('Block Chain',22,'activated',5),('Full stack Development',11,'activated',3),('MySQL',20,'activated',1);
+
+select *from students_activated_courses;
+
+INSERT INTO courses(course_name,course_duration)
+VALUES('Full stack Development','3 months & 5 months'),('Python IIT','2 months'),
+('Ethical Hacking','3 months'),
+('AWS Master','2 months'),('Testing Automation','3 months'),
+('Master Data Science','6 months'),('JAVASCRIPT FULL COURSE','1 month'),
+('Machine Learning','5 months'),('C programming','2 months'),
+('MySQL','2 months'),('Angular JS','3 months'),
+('Block Chain','3 months');
+
+select *from courses;
+
+//Question#3
+
+select student_name,problem_solved_count 
+from codekata inner join users on users.Id=codekata.user_Id;
+
+//Question#4
+
+
+select student_name,drives_name,access_times from companydrives 
+inner join users on users.Id=companydrives.user_Id;
+
+
+//Question#5
+select student_name,course_name,status_course from students_activated_courses
+inner join users on users.Id=students_activated_courses.user_Id group by course_name;
+
+//Question#6
+select mentors_name from mentors;
+
+//Question#7
+
+select mentors_name,count(user_Id) from mentors group by mentors_name;
+
+
+
