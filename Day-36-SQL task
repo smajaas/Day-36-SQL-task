@@ -166,7 +166,7 @@ select *from courses;
 
 //Question#3
 
-select student_name,problem_solved_count 
+select program_name,student_name,problem_solved_count 
 from codekata inner join users on users.Id=codekata.user_Id;
 
 //Question#4
